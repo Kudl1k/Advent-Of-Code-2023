@@ -12,50 +12,76 @@ fun loadFile(fileName: String): List<String> {
 
 fun getNumber(line: String): Boolean{
 
-    var blueHighest: Int = 0
-    var redHighest: Int = 0
-    var greenHighest: Int = 0
+
     var input: String = ""
     var tempInt: String = ""
+
+    var redCounter: Int = 0
+    var greenCounter: Int = 0
+    var blueCounter: Int = 0
+
+
     var game: Int = 0
     for (i in line.indices){
         if (line[i].isDigit()){
-            if (line[i] in '1'..'9'){
-                tempInt += line[i]
-            }
+            tempInt += line[i]
         } else {
-            if (line[i] in 'a'..'z'){
+            if (line[i] in 'a'..'z' || line[i] == ';'){
                 input += line[i]
             } else {
                 continue
             }
             when (input){
                 "red" -> {
-                    if (redHighest < tempInt.toInt()){
-                        redHighest = tempInt.toInt()
+                    redCounter += tempInt.toInt()
+                    if (12 < tempInt.toInt()){
+                        print("$tempInt red max value")
+                        return false
+                    }
+                    if (12 < redCounter){
+                        print("$redCounter red sum value")
+                        return false
                     }
                     tempInt = ""
                     input = ""
                 }
                 "green" -> {
-                    if (greenHighest < tempInt.toInt()){
-                        greenHighest = tempInt.toInt()
+                    greenCounter += tempInt.toInt()
+                    if (13 < tempInt.toInt()){
+                        print("$tempInt green max value")
+                        return false
+                    }
+                    if (13 < greenCounter){
+                        print("$greenCounter green sum value")
+                        return false
                     }
                     tempInt = ""
                     input = ""
                 }
                 "blue" -> {
-                    if (blueHighest < tempInt.toInt()){
-                        blueHighest = tempInt.toInt()
+                    blueCounter += tempInt.toInt()
+                    if (14 < tempInt.toInt()){
+                        print("$tempInt blue max value")
+                        return false
+                    }
+                    if (14 < blueCounter){
+                        print("$blueCounter blue sum value")
+                        return false
                     }
                     tempInt = ""
                     input = ""
                 }
+                ";" -> {
+                    tempInt = ""
+                    input = ""
+                    greenCounter = 0
+                    redCounter = 0
+                    blueCounter = 0
+                }
             }
         }
     }
-
-    return redHighest <= 12 && greenHighest <= 13 && blueHighest <= 14
+    return true
 }
 
 
@@ -64,11 +90,13 @@ fun main() {
     var result = 0
     for (i in lines.indices){
         val game = i + 1
-        val line = lines[i].dropWhile { it != ':' }
+        val line = lines[i].dropWhile { it != ':' }.drop(1)
+        print("game $game :")
+
         if (getNumber(line)){
-            println(game)
             result += game
         }
+        println()
     }
     println(result)
 }

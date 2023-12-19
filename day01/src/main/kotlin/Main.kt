@@ -9,7 +9,7 @@ fun loadFile(fileName: String): List<String> {
     return lines
 }
 
-fun getNumber(line: String): Int{
+fun getDigitFormNumber(line: String): Int{
     var number = ""
     for (i in line.indices){
         if (!line[i].isDigit()){
@@ -36,12 +36,71 @@ fun getNumber(line: String): Int{
     }
 }
 
+fun getTextFromNumber(line: String): Int {
+    var result = ""
+    var temp = ""
+    var text = ""
+
+    var listOfPair: List<Pair<String,Int>> = mutableListOf(
+        Pair("one",1),
+        Pair("two",2),
+        Pair("three",3),
+        Pair("four",4),
+        Pair("five",5),
+        Pair("six",6),
+        Pair("seven",7),
+        Pair("eight",8),
+        Pair("nine",9)
+    )
+    var i = 0
+    val flag = false
+    loop@while (i < line.length-1){
+        if (i+5 < line.length-1){
+            temp = line.substring(i,i+5)
+        } else {
+            break@loop
+        }
+        if (temp[0].isDigit()){
+            text += temp[0]
+            i++
+            continue
+        }
+        for (j in listOfPair.indices){
+            if (temp.contains(listOfPair[j].first,ignoreCase = true)){
+                val index = getStartingIndex(temp,listOfPair[j].first[0])
+                i += index
+                i += listOfPair[j].first.length-1
+                text += listOfPair[j].second
+                continue@loop
+            }
+        }
+        i++
+    }
+    println(text)
+    return result.toInt()
+}
+
+fun getStartingIndex(part: String,startingChar: Char): Int{
+    for (i in part.indices){
+        if (part[i] == startingChar){
+            return i
+        }
+    }
+    return 0
+}
+
+
+
 fun main() {
     val lines = loadFile("input.txt")
     val listOfNums = mutableListOf<Int>()
+    val listOfText = mutableListOf<Int>()
 
     lines.forEach {
-        listOfNums.add(getNumber(it))
+        listOfNums.add(getDigitFormNumber(it))
+    }
+    lines.forEach {
+        listOfText.add(getTextFromNumber(it))
     }
     println(listOfNums.sum())
 }

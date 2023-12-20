@@ -1,6 +1,7 @@
 package org.example
 
 import java.io.File
+import java.math.BigInteger
 import kotlin.time.times
 
 
@@ -12,36 +13,32 @@ fun loadFile(fileName: String): List<String> {
 }
 
 
-fun getTimeAndDistance(lines: List<String>):List<Pair<Int,Int>>{
-    val timeAndDistance = mutableListOf<Pair<Int,Int>>()
+fun getTimeAndDistance(lines: List<String>):List<Pair<BigInteger,BigInteger>>{
+    val timeAndDistance = mutableListOf<Pair<BigInteger,BigInteger>>()
 
 
     val time: List<String> = lines[0].split("\\s+".toRegex()).drop(1)
     val distance: List<String> = lines[1].split("\\s+".toRegex()).drop(1)
 
     for (i in time.indices){
-        timeAndDistance.add(Pair(time[i].toInt(),distance[i].toInt()))
+        timeAndDistance.add(Pair(time[i].toBigInteger(),distance[i].toBigInteger()))
     }
     return timeAndDistance
 }
 
-fun getNumberOfWays(table: List<Pair<Int,Int>>): Int{
-    val listOfPossibleWays = mutableListOf<Int>()
+fun getNumberOfWays(table: List<Pair<BigInteger,BigInteger>>): Int{
+    val listOfPossibleWays = mutableListOf<BigInteger>()
     var possibleWays = 0
     for (i in table.indices){
-        for (j in 0..table[i].first){
+        var j = BigInteger.ZERO
+        while (j < table[i].first){
             if (j*(table[i].first-j) > table[i].second){
                 possibleWays++
             }
+            j++
         }
-        listOfPossibleWays.add(possibleWays)
-        possibleWays = 0
     }
-    var result = 1
-    for (i in listOfPossibleWays.indices){
-        result *= listOfPossibleWays[i]
-    }
-    return result
+    return possibleWays
 }
 
 

@@ -19,19 +19,20 @@ fun loadCards(lines: List<List<String>>): List<Pair<String, String>>{
 }
 
 fun getRankings(cards: List<Pair<String,String>>){
-    val fiveOfKind = mutableListOf<Pair<String,String>>()
-    val fourOfKind = mutableListOf<Pair<String,String>>()
-    val fullHouse = mutableListOf<Pair<String,String>>()
-    val threeOfKind = mutableListOf<Pair<String,String>>()
-    val twoPair = mutableListOf<Pair<String,String>>()
-    val onePair = mutableListOf<Pair<String,String>>()
-    val highCard = mutableListOf<Pair<String,String>>()
+    val fiveOfKind = mutableListOf<Pair<MutableMap<Char,Int>,String>>()
+    val fourOfKind = mutableListOf<Pair<MutableMap<Char,Int>,String>>()
+    val fullHouse = mutableListOf<Pair<MutableMap<Char,Int>,String>>()
+    val threeOfKind = mutableListOf<Pair<MutableMap<Char,Int>,String>>()
+    val twoPair = mutableListOf<Pair<MutableMap<Char,Int>,String>>()
+    val onePair = mutableListOf<Pair<MutableMap<Char,Int>,String>>()
+    val highCard = mutableListOf<Pair<MutableMap<Char,Int>,String>>()
 
+    val rankings = mutableListOf<Pair<MutableMap<Char,Int>,String>>()
 
 
 
     for (i in cards.indices){
-        val map = mutableMapOf(
+        var map = mutableMapOf(
             'A' to 0,
             'K' to 0,
             'Q' to 0,
@@ -53,16 +54,45 @@ fun getRankings(cards: List<Pair<String,String>>){
                 }
             }
         }
-        for ((k,l) in map){
-            if (l == 5){
-                fiveOfKind.add(Pair<>)
-            }
-        }
+        rankings.add(Pair(map,cards[i].second))
     }
 
-
-
-
+    loop@for (i in rankings.indices){
+        for ((j,k) in rankings[i].first){
+            if (k == 5){
+                fiveOfKind.add(rankings[i])
+                continue@loop
+            } else if (k == 4){
+                fourOfKind.add(rankings[i])
+                continue@loop
+            } else if (k == 3){
+                for((n,m) in rankings[i].first){
+                    if (m == 2){
+                        fullHouse.add(rankings[i])
+                        continue@loop
+                    }
+                }
+                threeOfKind.add(rankings[i])
+                continue@loop
+            } else if (k == 2){
+                for((n,m) in rankings[i].first){
+                    if (m == 3){
+                        fullHouse.add(rankings[i])
+                        continue@loop
+                    }
+                }
+                twoPair.add(rankings[i])
+                continue@loop
+            }
+            onePair.add(rankings[i])
+        }
+    }
+    println(fiveOfKind)
+    println(fourOfKind)
+    println(fullHouse)
+    println(threeOfKind)
+    println(twoPair)
+    println(onePair)
 }
 
 

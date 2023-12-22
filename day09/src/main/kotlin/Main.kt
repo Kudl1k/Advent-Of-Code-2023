@@ -45,6 +45,22 @@ fun getHistory(list: List<Int>):Int{
     return result
 }
 
+fun getBackHistory(list: List<Int>): Int{
+    val history: MutableList<MutableList<Int>> = mutableListOf(list.toMutableList())
+    var temp = mutableListOf<Int>()
+    while (checkNull(temp)){
+        temp = mutableListOf()
+        for (i in 0..history[history.size-1].size-2){
+            temp.add(history[history.size-1][i+1]-history[history.size-1][i])
+        }
+        history.add(temp)
+    }
+    var result = 0
+    for (i in history.size-1 downTo 0){
+        result = history[i].first() - result
+    }
+    return result
+}
 
 
 fun main() {
@@ -55,7 +71,7 @@ fun main() {
     }
     val results = mutableListOf<Int>()
     nums.forEach {
-        results.add(getHistory(it))
+        results.add(getBackHistory(it))
     }
     println(results.sum())
 }
